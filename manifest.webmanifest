@@ -1,0 +1,16 @@
+{
+  "name": "แบบประเมินข้อเข่า",
+  "short_name": "ประเมินเข่า",
+  "description": "คิดคะแนน Oxford Knee Score, KOOS-PS และ EQ-5D-5L",
+  "lang": "th",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFEFE7",
+  "theme_color": "#FFEFE7",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

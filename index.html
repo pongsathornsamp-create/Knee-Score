@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFEFE7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ประเมินเข่า">
+<title>แบบประเมินข้อเข่า</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{--surface:rgba(255,255,255,.86);--ink:#3B2B2F;--muted:#7D6A6E;--line:#F1DCD8;--primary:#8E4A5E;--primary-soft:#F9E6E9;--warn:#8C6414}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"IBM Plex Sans Thai","Sarabun","Noto Sans Thai","Thonburi","Leelawadee UI",system-ui,sans-serif;
+  background:linear-gradient(170deg,#FFEFE7 0%,#FCE9EC 55%,#FBE6EF 100%);background-color:#FDEDEC;
+  color:var(--ink);min-height:100vh;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.wrap{max-width:720px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(56px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+.title{font-size:1.1rem;font-weight:700;margin:4px 0 0}
+.sec{margin-top:28px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding:0 2px 8px;border-bottom:2px solid var(--primary)}
+.sec-title{font-size:1.3rem;font-weight:700;margin:0;line-height:1.3}
+.sec-sub{font-size:.84rem;color:var(--muted);margin:2px 0 0}
+.sec-count{font-size:1rem;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.q{padding:16px 2px;border-bottom:1px solid var(--line)}
+.q-head{display:flex;gap:10px;align-items:flex-start}
+.q-num{flex:none;min-width:28px;height:28px;padding:0 5px;border-radius:14px;border:1.5px solid var(--line);display:grid;place-items:center;font-size:.78rem;font-weight:600;color:var(--muted);background:#fff}
+.q.done .q-num{background:var(--primary);border-color:var(--primary);color:#fff}
+.q-text{margin:1px 0 10px;font-weight:500}
+.opts{display:flex;flex-wrap:wrap;gap:8px;padding-left:38px}
+.opt{font:inherit;font-size:.92rem;display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 8px;min-height:40px;border:1px solid var(--line);background:#fff;border-radius:999px;cursor:pointer;color:var(--ink);text-align:left;line-height:1.35;-webkit-user-select:none;user-select:none}
+.opt-score{flex:none;width:22px;height:22px;border-radius:50%;background:var(--primary-soft);display:grid;place-items:center;font-size:.78rem;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.opt.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.opt.on .opt-score{background:rgba(255,255,255,.22);color:#fff}
+.vas{display:flex;align-items:center;gap:12px;padding-left:38px}
+.vas input[type=range]{flex:1;min-width:0;accent-color:var(--primary);height:32px}
+.vas input[type=range].unset{opacity:.4}
+.vas-num{width:84px;flex:none;text-align:center;font:inherit;font-weight:700;font-size:1.1rem;padding:8px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+@media (max-width:480px){.opts,.vas{padding-left:0}}
+button:focus-visible,input:focus-visible{outline:3px solid #E7AFBD;outline-offset:2px}
+.res{background:var(--surface);border:1px solid rgba(255,255,255,.9);box-shadow:0 1px 0 var(--line);border-radius:16px;padding:16px;margin-top:14px}
+.res-head{display:flex;justify-content:space-between;align-items:baseline}
+.res-name{font-weight:600}
+.small{font-size:.84rem}
+.muted{color:var(--muted)}
+.big{font-size:3rem;font-weight:700;line-height:1.05;margin:6px 0 12px;font-variant-numeric:tabular-nums}
+.big-den{font-size:1rem;font-weight:500;color:var(--muted);margin-left:6px}
+.interp{margin:8px 0 0;font-weight:500}
+.note-warn{margin:6px 0 0;font-size:.86rem;color:var(--warn)}
+.meter{height:10px;border-radius:5px;background:var(--primary-soft);overflow:hidden}
+.meter div{height:100%;background:var(--primary);border-radius:5px}
+.eqp{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 14px}
+.eqp-cell{display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.eqp-k{font-size:.75rem;color:var(--muted);font-weight:600}
+.eqp-v{font-size:1.7rem;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.eqp-cell.empty .eqp-v{color:var(--line)}
+.eqp-cell.l1{background:#FFF4F2;border-color:#F4DEDB}
+.eqp-cell.l2{background:#FADFE3;border-color:#F2CBD2}
+.eqp-cell.l3{background:#EDB9C5;border-color:#EDB9C5}
+.eqp-cell.l4{background:#B77289;border-color:#B77289;color:#fff}
+.eqp-cell.l5{background:#8E4A5E;border-color:#8E4A5E;color:#fff}
+.eqp-cell.l4 .eqp-k,.eqp-cell.l5 .eqp-k{color:rgba(255,255,255,.8)}
+.eq-row{display:grid;grid-template-columns:1.1fr 1.3fr .8fr;gap:8px}
+.eq-code{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.ruler-track{position:relative;height:10px}
+.ruler-bar{display:flex;height:100%;border-radius:5px;overflow:hidden}
+.ruler-marker{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--primary);transform:translate(-50%,-50%);transition:left .3s ease}
+.ruler-ticks{position:relative;height:18px;margin-top:6px;font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.ruler-ticks span{position:absolute;top:0}
+@media (prefers-reduced-motion:reduce){.ruler-marker{transition:none}}
+.btn{font:inherit;font-weight:600;border-radius:10px;padding:10px 16px;margin-top:24px;cursor:pointer;color:#B04A3C;border:1px solid #EFCFC9;background:#fff}
+.btn.armed{background:#B04A3C;border-color:#B04A3C;color:#fff}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="wrap" id="app">
+  <h1 class="title">แบบประเมินข้อเข่า</h1>
+  <section class="sec" id="s-oks"></section>
+  <section class="sec" id="s-koos"></section>
+  <section class="sec" id="s-eq"></section>
+  <section class="sec">
+    <div class="sec-head"><h2 class="sec-title">สรุปคะแนน</h2></div>
+    <div id="summary"></div>
+  </section>
+  <button type="button" class="btn" id="reset" hidden>ล้างคำตอบทั้งหมด</button>
+</main>
+
+<script>
+/* ---------- ข้อมูลแบบสอบถาม ---------- */
+var OKS = [
+  { q: "ท่านอธิบายความเจ็บปวดที่เกิดกับหัวเข่าของท่านโดยปกติอย่างไร", o: ["ไม่เจ็บเลย", "เจ็บน้อยมาก", "เจ็บนิดหน่อย", "เจ็บปานกลาง", "เจ็บรุนแรง"] },
+  { q: "ท่านประสบปัญหาอันเนื่องมาจากหัวเข่าของท่านในขณะชำระร่างกายและเช็ดตัว (ทั่วร่างกาย) บ้างหรือไม่", o: ["ไม่มีปัญหาเลย", "มีปัญหาน้อยมาก", "มีปัญหาปานกลาง", "มีปัญหารุนแรง", "ไม่สามารถทำสิ่งนี้ได้ด้วยตนเอง"] },
+  { q: "ท่านประสบปัญหาอันเนื่องมาจากหัวเข่าของท่านในขณะขึ้น-ลงหรือขณะใช้บริการขนส่งสาธารณะบ้างหรือไม่", o: ["ไม่มีปัญหาเลย", "มีปัญหาน้อยมาก", "มีปัญหาปานกลาง", "มีปัญหารุนแรง", "ไม่สามารถทำสิ่งนี้ได้ด้วยตนเอง"] },
+  { q: "ท่านสามารถเดินได้เป็นเวลานานเท่าใดก่อนที่ความเจ็บปวดที่หัวเข่าจะทวีความรุนแรง (เมื่อใช้หรือไม่ใช้ไม้ค้ำก็ตาม)", o: ["ไม่มีความเจ็บปวด / นานกว่า 30 นาที", "16-30 นาที", "5-15 นาที", "เดินได้ในบ้านเท่านั้น", "เจ็บรุนแรงเวลาเดิน"] },
+  { q: "หลังการรับประทานอาหาร (นั่งที่โต๊ะ) ท่านประสบความเจ็บปวดอันเนื่องมาจากหัวเข่าของท่านในขณะยืนขึ้นอย่างไร", o: ["ไม่เจ็บเลย", "เจ็บเล็กน้อย", "เจ็บปานกลาง", "เจ็บปวดมาก", "เจ็บจนทนไม่ได้"] },
+  { q: "ท่านต้องเดินกะเผลกเพราะหัวเข่าของท่านหรือไม่", o: ["น้อยครั้งมาก / ไม่เคยเลย", "บางครั้ง", "ค่อนข้างบ่อย", "เป็นส่วนใหญ่", "ตลอดเวลา"] },
+  { q: "ท่านสามารถคุกเข่าและยืนขึ้นภายหลังได้หรือไม่", o: ["ได้โดยง่าย", "ลำบากเล็กน้อย", "ลำบากปานกลาง", "ลำบากมาก", "ไม่สามารถทำได้"] },
+  { q: "ท่านประสบปัญหาอันเนื่องมาจากหัวเข่าของท่านในเวลาเข้านอนกลางคืนหรือไม่", o: ["ไม่", "เพียง 1-2 คืน", "บางคืน", "เป็นส่วนมาก", "ทุกคืน"] },
+  { q: "ท่านมีความเจ็บปวดอันเนื่องมาจากหัวเข่าของท่านและส่งผลกระทบต่องานประจำ (รวมถึงงานบ้าน) มากเพียงใด", o: ["ไม่มีผลเลย", "มีผลเล็กน้อย", "มีผลปานกลาง", "มีผลมาก", "ไม่สามารถทำงานได้"] },
+  { q: "ท่านเคยรู้สึกว่าหัวเข่าของท่านจะเสียและไม่สามารถพยุงร่างกายของท่านไว้ได้อีกต่อไปหรือไม่", o: ["นานๆ ครั้ง / ไม่เคยเลย", "บางครั้งหรือในระยะแรกๆ", "บ่อยครั้งและไม่ใช่เพียงระยะแรกเท่านั้น", "รู้สึกเช่นนั้นเป็นส่วนใหญ่", "รู้สึกเช่นนั้นตลอดเวลา"] },
+  { q: "ท่านสามารถไปจับจ่ายซื้อของใช้ตามลำพังได้หรือไม่", o: ["ได้โดยง่าย", "ลำบากเล็กน้อย", "ลำบากปานกลาง", "ลำบากมาก", "ไม่สามารถทำได้ด้วยตัวเอง"] },
+  { q: "ท่านสามารถเดินลงบันไดเป็นระยะหนึ่งช่วงของบันไดได้หรือไม่", o: ["ได้โดยง่าย", "ลำบากเล็กน้อย", "ลำบากปานกลาง", "ลำบากมาก", "ไม่สามารถทำได้ด้วยตัวเอง"] }
+];
+var KOOS = ["ลุกขึ้นจากเตียง", "สวมถุงน่องหรือถุงเท้า", "ลุกขึ้นจากเก้าอี้", "ก้มหยิบของจากพื้น", "หมุนบิดขาบนเข่าข้างที่ปวด", "คุกเข่า", "ย่อเข่าหรือนั่งยองๆ"];
+var KOOS_OPTS = ["ไม่ลำบากเลย", "ลำบากเล็กน้อย", "ลำบากปานกลาง", "ลำบากมาก", "ลำบากมากที่สุด"];
+
+// EQ-5D-5L: ป้ายย่อสำหรับกรอกจากแบบฟอร์มกระดาษ ไม่ใช่ถ้อยคำทางการ
+// แก้ให้ตรงกับฉบับภาษาไทยที่ได้รับอนุญาตจาก EuroQol ได้ที่นี่
+var EQ = [
+  { k: "MO", s: "การเคลื่อนไหว (การเดิน)", o: ["ไม่มีปัญหา", "มีปัญหาเล็กน้อย", "มีปัญหาปานกลาง", "มีปัญหามาก", "เดินไม่ได้"] },
+  { k: "SC", s: "การดูแลตนเอง (อาบน้ำ แต่งตัว)", o: ["ไม่มีปัญหา", "มีปัญหาเล็กน้อย", "มีปัญหาปานกลาง", "มีปัญหามาก", "ทำเองไม่ได้"] },
+  { k: "UA", s: "กิจกรรมที่ทำเป็นประจำ", o: ["ไม่มีปัญหา", "มีปัญหาเล็กน้อย", "มีปัญหาปานกลาง", "มีปัญหามาก", "ทำไม่ได้"] },
+  { k: "PD", s: "อาการเจ็บปวด / ไม่สบายตัว", o: ["ไม่มี", "เล็กน้อย", "ปานกลาง", "มาก", "มากที่สุด"] },
+  { k: "AD", s: "ความวิตกกังวล / ซึมเศร้า", o: ["ไม่มี", "เล็กน้อย", "ปานกลาง", "มาก", "มากที่สุด"] }
+];
+
+// ค่าน้ำหนักอรรถประโยชน์ EQ-5D-5L ประเทศไทย (Pattanaphesaj et al., 2018): ดัชนี = 1 − ผลรวมค่าลดทอน
+var TH_DEC = {
+  MO: [0, 0.066, 0.087, 0.211, 0.371],
+  SC: [0, 0.058, 0.071, 0.193, 0.25],
+  UA: [0, 0.058, 0.071, 0.154, 0.248],
+  PD: [0, 0.056, 0.067, 0.207, 0.256],
+  AD: [0, 0.058, 0.096, 0.233, 0.295]
+};
+
+var BANDS = [
+  { min: 0, max: 19, label: "อาจบ่งชี้ข้อเข่าเสื่อมรุนแรง", bar: "#E8A196", text: "#B04A3C" },
+  { min: 20, max: 29, label: "ปานกลางถึงรุนแรง", bar: "#F0BC8C", text: "#B5652A" },
+  { min: 30, max: 39, label: "เล็กน้อยถึงปานกลาง", bar: "#E6D38A", text: "#8C7214" },
+  { min: 40, max: 48, label: "การทำงานของข้อเข่าเป็นที่น่าพอใจ", bar: "#93C9A4", text: "#3B7D52" }
+];
+
+/* ---------- การคิดคะแนน ---------- */
+function answered(a) { return a.filter(function (v) { return v !== null; }); }
+
+// OKS: ซ้ายสุด = 4 ... ขวาสุด = 0 รวม 0–48 ขาดไม่เกิน 2 ข้อ แทนค่าด้วยค่าเฉลี่ย
+function scoreOKS(ans) {
+  var vals = answered(ans).map(function (i) { return 4 - i; });
+  var n = vals.length, sum = vals.reduce(function (a, b) { return a + b; }, 0);
+  if (n === 12) return { total: sum, n: n, status: "complete" };
+  if (n >= 10) return { total: Math.round(sum + (sum / n) * (12 - n)), n: n, status: "imputed" };
+  return { total: null, n: n, status: "insufficient" };
+}
+function bandOf(t) {
+  if (t === null) return null;
+  for (var i = 0; i < BANDS.length; i++) if (t >= BANDS[i].min && t <= BANDS[i].max) return BANDS[i];
+  return null;
+}
+// KOOS-PS: ซ้ายสุด = 0 ... ขวาสุด = 4 รวมดิบ 0–28 ต้องตอบครบ 7 ข้อ
+function scoreKOOS(ans) {
+  var vals = answered(ans);
+  return { n: vals.length, raw: vals.length === 7 ? vals.reduce(function (a, b) { return a + b; }, 0) : null };
+}
+// EQ-5D-5L: ระดับ 1–5 เรียงตาม MO SC UA PD AD
+function scoreEQ(ans) {
+  var n = answered(ans).length;
+  if (n < 5) return { n: n, profile: null, index: null };
+  var dec = 0;
+  EQ.forEach(function (d, i) { dec += TH_DEC[d.k][ans[i]]; });
+  return { n: n, profile: ans.map(function (v) { return v + 1; }).join(""), index: Math.round((1 - dec) * 1000) / 1000 };
+}
+function fmtIdx(x) { return x === null ? "–" : x.toFixed(3); }
+
+/* ---------- สถานะ ---------- */
+function blank() { return { oks: fill(12), koos: fill(7), eq: fill(5), vas: null }; }
+function fill(n) { var a = []; for (var i = 0; i < n; i++) a.push(null); return a; }
+var f = blank();
+var syncers = [];
+
+/* ---------- สร้างหน้าจอ ---------- */
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function sectionHead(title, sub, countId) {
+  var head = el("div", "sec-head");
+  var left = el("div");
+  left.appendChild(el("h2", "sec-title", title));
+  left.appendChild(el("p", "sec-sub", sub));
+  var count = el("span", "sec-count");
+  count.id = countId;
+  head.appendChild(left);
+  head.appendChild(count);
+  return head;
+}
+
+function question(key, idx, num, text, opts, scoreFor) {
+  var q = el("div", "q");
+  var head = el("div", "q-head");
+  head.appendChild(el("span", "q-num", String(num)));
+  head.appendChild(el("p", "q-text", text));
+  q.appendChild(head);
+  var box = el("div", "opts");
+  box.setAttribute("role", "radiogroup");
+  box.setAttribute("aria-label", text);
+  var btns = opts.map(function (o, i) {
+    var b = el("button", "opt");
+    b.type = "button";
+    b.setAttribute("role", "radio");
+    b.appendChild(el("span", "opt-score", String(scoreFor(i))));
+    b.appendChild(document.createTextNode(o));
+    b.addEventListener("click", function () {
+      f[key][idx] = f[key][idx] === i ? null : i;
+      sync();
+      update();
+    });
+    box.appendChild(b);
+    return b;
+  });
+  q.appendChild(box);
+  function sync() {
+    var v = f[key][idx];
+    q.classList.toggle("done", v !== null);
+    btns.forEach(function (b, i) {
+      b.classList.toggle("on", v === i);
+      b.setAttribute("aria-checked", v === i ? "true" : "false");
+    });
+  }
+  syncers.push(sync);
+  sync();
+  return q;
+}
+
+function build() {
+  var sOks = document.getElementById("s-oks");
+  sOks.appendChild(sectionHead("Oxford Knee Score", "ช่วง 4 สัปดาห์ที่ผ่านมา, ซ้ายสุด 4 คะแนน ถึงขวาสุด 0 คะแนน", "c-oks"));
+  OKS.forEach(function (it, i) {
+    sOks.appendChild(question("oks", i, i + 1, it.q, it.o, function (j) { return 4 - j; }));
+  });
+
+  var sKoos = document.getElementById("s-koos");
+  sKoos.appendChild(sectionHead("KOOS-PS", "ช่วงสัปดาห์ที่ผ่านมา, ซ้ายสุด 0 คะแนน ถึงขวาสุด 4 คะแนน", "c-koos"));
+  KOOS.forEach(function (t, i) {
+    sKoos.appendChild(question("koos", i, i + 1, t, KOOS_OPTS, function (j) { return j; }));
+  });
+
+  var sEq = document.getElementById("s-eq");
+  sEq.appendChild(sectionHead("EQ-5D-5L", "สุขภาพในวันนี้, ตัวเลขบนตัวเลือกคือระดับ 1–5", "c-eq"));
+  EQ.forEach(function (d, i) {
+    sEq.appendChild(question("eq", i, d.k, d.s, d.o, function (j) { return j + 1; }));
+  });
+
+  // EQ VAS
+  var q = el("div", "q");
+  var head = el("div", "q-head");
+  head.appendChild(el("span", "q-num", "VAS"));
+  head.appendChild(el("p", "q-text", "สุขภาพโดยรวมวันนี้ (0 = แย่ที่สุด, 100 = ดีที่สุด)"));
+  q.appendChild(head);
+  var row = el("div", "vas");
+  var range = el("input");
+  range.type = "range"; range.min = "0"; range.max = "100"; range.step = "1";
+  range.setAttribute("aria-label", "EQ VAS แบบเลื่อน");
+  var num = el("input", "vas-num");
+  num.type = "number"; num.min = "0"; num.max = "100"; num.placeholder = "–";
+  num.setAttribute("inputmode", "numeric");
+  num.setAttribute("aria-label", "EQ VAS ตัวเลข");
+  function setVas(raw) {
+    if (raw === "" || raw === null) f.vas = null;
+    else {
+      var n = Math.round(Number(raw));
+      if (!isFinite(n)) return;
+      f.vas = Math.max(0, Math.min(100, n));
+    }
+    syncVas(true);
+    update();
+  }
+  function syncVas(fromNumberTyping) {
+    q.classList.toggle("done", f.vas !== null);
+    range.value = f.vas === null ? 50 : f.vas;
+    range.classList.toggle("unset", f.vas === null);
+    if (!fromNumberTyping || document.activeElement !== num) num.value = f.vas === null ? "" : f.vas;
+  }
+  range.addEventListener("input", function () { setVas(range.value); });
+  range.addEventListener("click", function () { setVas(range.value); });
+  num.addEventListener("input", function () { setVas(num.value); });
+  num.addEventListener("blur", function () { syncVas(false); });
+  row.appendChild(range);
+  row.appendChild(num);
+  q.appendChild(row);
+  sEq.appendChild(q);
+  syncers.push(function () { syncVas(false); });
+  syncVas(false);
+
+  // ปุ่มล้าง (แตะสองครั้ง)
+  var reset = document.getElementById("reset");
+  var armedTimer = null;
+  reset.addEventListener("click", function () {
+    if (!reset.classList.contains("armed")) {
+      reset.classList.add("armed");
+      reset.textContent = "แตะอีกครั้งเพื่อล้าง";
+      armedTimer = setTimeout(disarm, 3500);
+      return;
+    }
+    disarm();
+    f = blank();
+    syncers.forEach(function (s) { s(); });
+    update();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  function disarm() {
+    clearTimeout(armedTimer);
+    reset.classList.remove("armed");
+    reset.textContent = "ล้างคำตอบทั้งหมด";
+  }
+}
+
+/* ---------- สรุปคะแนน ---------- */
+function ruler(total) {
+  var segs = [19.5, 10, 10, 8.5];
+  var bar = BANDS.map(function (b, i) {
+    return '<div style="width:' + (segs[i] / 48) * 100 + '%;background:' + b.bar + '"></div>';
+  }).join("");
+  var marker = total === null ? "" : '<div class="ruler-marker" style="left:' + (total / 48) * 100 + '%"></div>';
+  var ticks = [0, 20, 30, 40, 48].map(function (t) {
+    var pos = t === 0 ? 0 : t === 48 ? 100 : ((t - 0.5) / 48) * 100;
+    var tr = t === 0 ? "none" : t === 48 ? "translateX(-100%)" : "translateX(-50%)";
+    return '<span style="left:' + pos + '%;transform:' + tr + '">' + t + "</span>";
+  }).join("");
+  return '<div aria-hidden="true"><div class="ruler-track"><div class="ruler-bar">' + bar + "</div>" + marker +
+    '</div><div class="ruler-ticks">' + ticks + "</div></div>";
+}
+
+function update() {
+  var oks = scoreOKS(f.oks), koos = scoreKOOS(f.koos), eq = scoreEQ(f.eq), band = bandOf(oks.total);
+  document.getElementById("c-oks").textContent = oks.n + "/12";
+  document.getElementById("c-koos").textContent = koos.n + "/7";
+  document.getElementById("c-eq").textContent = (eq.n + (f.vas !== null ? 1 : 0)) + "/6";
+
+  var cells = EQ.map(function (d, i) {
+    var v = f.eq[i];
+    return '<div class="eqp-cell ' + (v === null ? "empty" : "l" + (v + 1)) + '"><span class="eqp-k">' + d.k +
+      '</span><span class="eqp-v">' + (v === null ? "–" : v + 1) + "</span></div>";
+  }).join("");
+
+  var html =
+    '<div class="res">' +
+      '<div class="res-head"><span class="res-name">Oxford Knee Score</span><span class="muted small">ตอบ ' + oks.n + '/12</span></div>' +
+      '<div class="big" style="color:' + (band ? band.text : "var(--muted)") + '">' + (oks.total === null ? "–" : oks.total) + '<span class="big-den">/48</span></div>' +
+      ruler(oks.total) +
+      '<p class="interp">' + (oks.status === "insufficient" ? "ต้องตอบอย่างน้อย 10 ข้อจึงคำนวณคะแนนรวมได้" : band.label) + "</p>" +
+      (oks.status === "imputed" ? '<p class="note-warn">ขาด ' + (12 - oks.n) + " ข้อ แทนค่าด้วยค่าเฉลี่ยของข้อที่ตอบแล้ว</p>" : "") +
+    "</div>" +
+    '<div class="res">' +
+      '<div class="res-head"><span class="res-name">KOOS-PS</span><span class="muted small">ตอบ ' + koos.n + '/7</span></div>' +
+      '<div class="big">' + (koos.raw === null ? "–" : koos.raw) + '<span class="big-den">/28 คะแนนดิบ</span></div>' +
+      '<div class="meter"><div style="width:' + (koos.raw === null ? 0 : (koos.raw / 28) * 100) + '%"></div></div>' +
+      '<p class="interp">' + (koos.raw === null ? "ต้องตอบครบ 7 ข้อจึงคิดคะแนนได้" : "ยิ่งมากยิ่งลำบาก") + "</p>" +
+    "</div>" +
+    '<div class="res">' +
+      '<div class="res-head"><span class="res-name">EQ-5D-5L</span><span class="muted small">ตอบ ' + eq.n + '/5</span></div>' +
+      '<div class="eqp" aria-label="ระดับ EQ-5D-5L รายมิติ">' + cells + "</div>" +
+      '<div class="eq-row">' +
+        '<div><div class="muted small">สถานะสุขภาพ</div><div class="eq-code">' + (eq.profile || "–") + "</div></div>" +
+        '<div><div class="muted small">ดัชนี</div><div class="eq-code">' + fmtIdx(eq.index) + "</div></div>" +
+        '<div><div class="muted small">EQ VAS</div><div class="eq-code">' + (f.vas === null ? "–" : f.vas) + "</div></div>" +
+      "</div>" +
+      (eq.index === null ? '<p class="interp">ต้องตอบครบ 5 มิติจึงคำนวณดัชนีได้</p>' : '<p class="muted small" style="margin:8px 0 0">ดัชนีคำนวณจากค่าน้ำหนักคนไทย (1 = สุขภาพสมบูรณ์)</p>') +
+    "</div>";
+  document.getElementById("summary").innerHTML = html;
+
+  var has = answered(f.oks).length || answered(f.koos).length || answered(f.eq).length || f.vas !== null;
+  document.getElementById("reset").hidden = !has;
+}
+
+build();
+update();
+
+/* ---------- ใช้งานออฟไลน์ (เมื่อเปิดผ่านเว็บ https ของตัวเอง) ---------- */
+if ("serviceWorker" in navigator && location.protocol === "https:" && !/googleusercontent|script\.google/.test(location.hostname)) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

@@ -167,6 +167,30 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
 .foot{margin:24px 0 0;font-size:.75rem;color:var(--faint);text-align:center;line-height:1.6}
 [hidden]{display:none!important}
 @media (max-width:360px){.dot i{width:38px;height:38px}.rail::before{top:19px}}
+
+/* ---------- จอคอมพิวเตอร์: ใช้พื้นที่เต็มหน้าจอ ---------- */
+@media (min-width:1000px){
+  .wrap{max-width:1680px;padding-left:40px;padding-right:40px}
+  .mast img{width:58px;height:58px;border-radius:15px}
+  .brand{font-size:1.65rem}
+  .brand-sub{font-size:.9rem}
+  .layout{display:grid;gap:44px;align-items:start;margin-top:40px;
+    grid-template-columns:minmax(0,1fr) 370px;grid-template-areas:"a s" "b s"}
+  .col-a{grid-area:a}
+  .col-b{grid-area:b}
+  /* คะแนนลอยตามไปด้วยขณะเลื่อน ถ้าสูงเกินจอก็เลื่อนในแผงได้ */
+  .col-sum{grid-area:s;position:sticky;top:26px;
+    max-height:calc(100vh - 52px);overflow-y:auto;scrollbar-width:thin;overscroll-behavior:contain}
+  .col-a .sec,.col-b .sec:first-child,.col-sum .sec{margin-top:0}
+  .q-text{max-width:68ch}
+  .rail,.legend,.rail-ends,.vas-steps,.vas-val,.q input[type=range]{max-width:620px}
+  .btn{margin-top:18px}
+}
+/* จอกว้าง: แยกแบบสอบถามเป็นสองคอลัมน์ ให้เลื่อนสั้นลง */
+@media (min-width:1360px){
+  .layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 390px;grid-template-areas:"a b s"}
+  .col-b .sec:first-child{margin-top:0}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -184,17 +208,23 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-o
     <p class="prog-txt" id="prog-txt"></p>
   </div>
 
-  <section class="sec" id="s-oks"></section>
-  <section class="sec" id="s-koos"></section>
-  <section class="sec" id="s-eq"></section>
-
-  <section class="sec">
-    <div class="sec-head"><h2 class="sec-title">สรุปคะแนน</h2></div>
-    <div id="summary"></div>
-  </section>
-
-  <button type="button" class="btn" id="reset" hidden>ล้างคำตอบทั้งหมด</button>
-  <p class="foot">คำตอบอยู่ในหน้าจอนี้เท่านั้น ไม่มีการเก็บข้อมูล</p>
+  <div class="layout">
+    <div class="col-a">
+      <section class="sec" id="s-oks"></section>
+    </div>
+    <div class="col-b">
+      <section class="sec" id="s-koos"></section>
+      <section class="sec" id="s-eq"></section>
+    </div>
+    <aside class="col-sum">
+      <section class="sec">
+        <div class="sec-head"><h2 class="sec-title">สรุปคะแนน</h2></div>
+        <div id="summary"></div>
+      </section>
+      <button type="button" class="btn" id="reset" hidden>ล้างคำตอบทั้งหมด</button>
+      <p class="foot">คำตอบอยู่ในหน้าจอนี้เท่านั้น ไม่มีการเก็บข้อมูล</p>
+    </aside>
+  </div>
 </main>
 
 <script>

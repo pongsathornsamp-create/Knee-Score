@@ -1,5 +1,5 @@
 // เก็บไฟล์แอปไว้ในเครื่อง เพื่อให้เปิดใช้ได้แม้ไม่มีอินเทอร์เน็ต
-const CACHE = "knee-prom-v5";
+const CACHE = "knee-prom-v6";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
